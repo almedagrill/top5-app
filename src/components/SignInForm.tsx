@@ -4,7 +4,7 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export function SignInForm() {
+export function SignInForm({ redirectTo = "/feed" }: { redirectTo?: string }) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,7 +26,7 @@ export function SignInForm() {
       if (result?.error) {
         setError("Invalid email or password");
       } else {
-        router.push("/feed");
+        router.push(redirectTo);
         router.refresh();
       }
     } catch {

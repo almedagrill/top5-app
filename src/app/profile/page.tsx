@@ -156,7 +156,7 @@ export default async function ProfilePage() {
           </div>
 
           {/* Invite Form */}
-          <InviteForm currentCount={totalCount} />
+          <InviteForm currentCount={totalCount} userId={session.user.id} />
 
           {/* Pending */}
           {pendingInvites.length > 0 && (

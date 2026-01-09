@@ -3,11 +3,16 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { SignInForm } from "@/components/SignInForm";
 
-export default async function SignInPage() {
+export default async function SignInPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ redirect?: string }>;
+}) {
   const session = await auth();
+  const { redirect: redirectTo } = await searchParams;
 
   if (session?.user) {
-    redirect("/feed");
+    redirect(redirectTo || "/feed");
   }
 
   return (
@@ -31,7 +36,7 @@ export default async function SignInPage() {
           </h1>
 
           {/* Email/Password Form */}
-          <SignInForm />
+          <SignInForm redirectTo={redirectTo || "/feed"} />
 
           {/* Divider */}
           <div className="flex items-center gap-4 my-6">
@@ -44,7 +49,7 @@ export default async function SignInPage() {
           <form
             action={async () => {
               "use server";
-              await signIn("google", { redirectTo: "/feed" });
+              await signIn("google", { redirectTo: redirectTo || "/feed" });
             }}
           >
             <button
@@ -81,7 +86,7 @@ export default async function SignInPage() {
           {/* Sign up link */}
           <p className="text-center mt-6 text-sm" style={{ color: "var(--ink-light)" }}>
             Don&apos;t have an account?{" "}
-            <Link href="/sign-up" className="link">
+            <Link href={redirectTo ? `/sign-up?redirect=${redirectTo}` : "/sign-up"} className="link">
               Sign up
             </Link>
           </p>

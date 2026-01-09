@@ -4,7 +4,7 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export function SignUpForm() {
+export function SignUpForm({ redirectTo = "/feed" }: { redirectTo?: string }) {
   const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -43,7 +43,7 @@ export function SignUpForm() {
       if (result?.error) {
         setError("Account created but couldn't sign in. Please sign in manually.");
       } else {
-        router.push("/feed");
+        router.push(redirectTo);
         router.refresh();
       }
     } catch {

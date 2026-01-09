@@ -3,11 +3,16 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { SignUpForm } from "@/components/SignUpForm";
 
-export default async function SignUpPage() {
+export default async function SignUpPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ redirect?: string }>;
+}) {
   const session = await auth();
+  const { redirect: redirectTo } = await searchParams;
 
   if (session?.user) {
-    redirect("/feed");
+    redirect(redirectTo || "/feed");
   }
 
   return (
@@ -31,7 +36,7 @@ export default async function SignUpPage() {
           </h1>
 
           {/* Email/Password Form */}
-          <SignUpForm />
+          <SignUpForm redirectTo={redirectTo || "/feed"} />
 
           {/* Divider */}
           <div className="flex items-center gap-4 my-6">
@@ -44,7 +49,7 @@ export default async function SignUpPage() {
           <form
             action={async () => {
               "use server";
-              await signIn("google", { redirectTo: "/feed" });
+              await signIn("google", { redirectTo: redirectTo || "/feed" });
             }}
           >
             <button
@@ -81,7 +86,7 @@ export default async function SignUpPage() {
           {/* Sign in link */}
           <p className="text-center mt-6 text-sm" style={{ color: "var(--ink-light)" }}>
             Already have an account?{" "}
-            <Link href="/sign-in" className="link">
+            <Link href={redirectTo ? `/sign-in?redirect=${redirectTo}` : "/sign-in"} className="link">
               Sign in
             </Link>
           </p>
