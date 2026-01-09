@@ -15,8 +15,8 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "Top 5 - Share What Matters",
-  description: "Share your top 5 things with the 5 people who matter most.",
+  title: "Top 5 - Choose Wisely",
+  description: "You are the average of the 5 people you surround yourself with.",
 };
 
 export default function RootLayout({
