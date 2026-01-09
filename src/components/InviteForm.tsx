@@ -5,34 +5,24 @@ import { useRouter } from "next/navigation";
 
 export function InviteForm({ currentCount }: { currentCount: number }) {
   const router = useRouter();
-  const [email, setEmail] = useState("");
   const [inviteLink, setInviteLink] = useState("");
-  const [emailSent, setEmailSent] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
   const canInvite = currentCount < 5;
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  async function getInviteLink() {
     setError("");
     setInviteLink("");
-    setEmailSent(false);
     setCopied(false);
-
-    if (!email.trim()) {
-      setError("Enter an email");
-      return;
-    }
-
-    setIsSubmitting(true);
+    setIsLoading(true);
 
     try {
       const response = await fetch("/api/invites", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim() }),
+        body: JSON.stringify({}),
       });
 
       const data = await response.json();
@@ -42,13 +32,17 @@ export function InviteForm({ currentCount }: { currentCount: number }) {
       }
 
       setInviteLink(data.inviteLink);
-      setEmailSent(data.emailSent);
-      setEmail("");
+
+      // Auto-copy to clipboard
+      await navigator.clipboard.writeText(data.inviteLink);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
-      setIsSubmitting(false);
+      setIsLoading(false);
     }
   }
 
@@ -74,40 +68,26 @@ export function InviteForm({ currentCount }: { currentCount: number }) {
 
   return (
     <div className="card p-6">
-      <form onSubmit={handleSubmit} className="flex gap-3">
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="friend@email.com"
-          className="input flex-1"
-        />
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="btn btn-primary disabled:opacity-40"
-        >
-          {isSubmitting ? "..." : "Invite"}
-        </button>
-      </form>
-
-      {error && (
-        <p className="mt-3 text-sm" style={{ color: "#B85A45" }}>
-          {error}
-        </p>
-      )}
-
-      {inviteLink && (
-        <div className="mt-4">
-          {emailSent ? (
-            <p className="text-sm mb-3" style={{ color: "var(--ink-light)" }}>
-              Invite sent! You can also share this link:
-            </p>
-          ) : (
-            <p className="text-sm mb-3" style={{ color: "var(--ink-light)" }}>
-              Share this link with them:
+      {!inviteLink ? (
+        <>
+          <button
+            onClick={getInviteLink}
+            disabled={isLoading}
+            className="btn btn-primary w-full disabled:opacity-40"
+          >
+            {isLoading ? "Creating..." : "Get invite link"}
+          </button>
+          {error && (
+            <p className="mt-3 text-sm text-center" style={{ color: "#B85A45" }}>
+              {error}
             </p>
           )}
+        </>
+      ) : (
+        <div>
+          <p className="text-sm mb-3" style={{ color: "var(--ink-light)" }}>
+            {copied ? "Copied!" : "Share this link:"}
+          </p>
           <div className="flex gap-2">
             <input
               type="text"
@@ -124,6 +104,13 @@ export function InviteForm({ currentCount }: { currentCount: number }) {
               {copied ? "Copied!" : "Copy"}
             </button>
           </div>
+          <button
+            onClick={() => setInviteLink("")}
+            className="mt-4 text-sm w-full"
+            style={{ color: "var(--ink-faint)" }}
+          >
+            Get another link
+          </button>
         </div>
       )}
     </div>

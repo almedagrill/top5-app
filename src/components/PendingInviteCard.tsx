@@ -14,8 +14,11 @@ export function PendingInviteCard({ invite }: PendingInviteCardProps) {
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
 
+  const isLinkInvite = invite.email.endsWith("@invite.local");
+  const displayText = isLinkInvite ? "Invite link" : invite.email;
+
   async function handleCancel() {
-    if (!confirm(`Cancel invite to ${invite.email}?`)) return;
+    if (!confirm(isLinkInvite ? "Cancel this invite link?" : `Cancel invite to ${invite.email}?`)) return;
 
     setIsDeleting(true);
     try {
@@ -35,7 +38,7 @@ export function PendingInviteCard({ invite }: PendingInviteCardProps) {
 
   return (
     <div className="card p-4 flex items-center justify-between">
-      <span style={{ color: "var(--ink)" }}>{invite.email}</span>
+      <span style={{ color: "var(--ink)" }}>{displayText}</span>
       <div className="flex items-center gap-3">
         <button
           onClick={handleCancel}
