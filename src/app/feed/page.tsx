@@ -5,6 +5,9 @@ import { Navigation } from "@/components/Navigation";
 import { PostCard } from "@/components/PostCard";
 import Link from "next/link";
 
+// Founder ID for showing CTA to new users
+const FOUNDER_ID = "cmk75osam000011582fsnrqqg";
+
 export default async function FeedPage() {
   const session = await auth();
 
@@ -23,6 +26,9 @@ export default async function FeedPage() {
   });
 
   const friendIds = connections.map((c) => c.friendId);
+
+  // Check if user only has founder connection (new user who hasn't added anyone)
+  const hasOnlyFounder = friendIds.length === 1 && friendIds[0] === FOUNDER_ID;
 
   // Include own posts + friends' posts
   const posts = await prisma.post.findMany({
@@ -137,6 +143,24 @@ export default async function FeedPage() {
                 </div>
               ))}
             </div>
+
+            {/* CTA for new users who only have founder connection */}
+            {hasOnlyFounder && (
+              <div
+                className="mt-8 p-6 rounded-lg text-center"
+                style={{ background: "var(--paper-dark)" }}
+              >
+                <p className="text-lg font-medium" style={{ color: "var(--ink)" }}>
+                  Add <span className="five">5</span> people to your circle.
+                </p>
+                <p className="mt-1" style={{ color: "var(--ink-light)" }}>
+                  Choose wisely.
+                </p>
+                <Link href="/profile" className="btn btn-primary mt-4 inline-flex">
+                  Invite someone
+                </Link>
+              </div>
+            )}
 
             {/* Subtle footer quote */}
             <footer
