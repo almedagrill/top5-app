@@ -20,7 +20,6 @@ export async function POST(request: Request) {
         title: string;
         description: string;
         url: string;
-        imageUrl: string;
         rank: number;
       }[];
     };
@@ -43,7 +42,6 @@ export async function POST(request: Request) {
             title: item.title,
             description: item.description || null,
             url: item.url || null,
-            imageUrl: item.imageUrl || null,
             rank: item.rank,
           })),
         },

@@ -195,7 +195,6 @@ exports.Prisma.PostItemScalarFieldEnum = {
   title: 'title',
   description: 'description',
   url: 'url',
-  imageUrl: 'imageUrl',
   rank: 'rank'
 };
 
