@@ -67,7 +67,9 @@ export async function POST(request: Request) {
       );
     }
 
-    // Create connection (inviter -> joiner)
+    // Create connection (inviter -> joiner only)
+    // This is intentionally one-way: joining someone's circle
+    // only adds you to THEIR circle, not them to yours
     await prisma.connection.create({
       data: {
         userId: inviterId,
@@ -75,31 +77,6 @@ export async function POST(request: Request) {
         status: "ACCEPTED",
       },
     });
-
-    // Also create reverse connection if joiner has room
-    const joinerConnectionCount = await prisma.connection.count({
-      where: { userId: session.user.id },
-    });
-
-    if (joinerConnectionCount < 5) {
-      // Check if reverse connection already exists
-      const reverseConnection = await prisma.connection.findFirst({
-        where: {
-          userId: session.user.id,
-          friendId: inviterId,
-        },
-      });
-
-      if (!reverseConnection) {
-        await prisma.connection.create({
-          data: {
-            userId: session.user.id,
-            friendId: inviterId,
-            status: "ACCEPTED",
-          },
-        });
-      }
-    }
 
     return NextResponse.json({ success: true });
   } catch (error) {
