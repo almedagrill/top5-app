@@ -16,6 +16,34 @@ type PostWithItems = {
   items: PostItem[];
 };
 
+const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+function TextWithLinks({ text }: { text: string }) {
+  const parts = text.split(urlRegex);
+
+  return (
+    <>
+      {parts.map((part, i) => {
+        if (part.match(urlRegex)) {
+          return (
+            <a
+              key={i}
+              href={part}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline break-all"
+              style={{ color: "var(--warm)" }}
+            >
+              {part}
+            </a>
+          );
+        }
+        return <span key={i}>{part}</span>;
+      })}
+    </>
+  );
+}
+
 export function PostCard({ post }: { post: PostWithItems }) {
   const sortedItems = [...post.items].sort((a, b) => a.rank - b.rank);
   const initial = post.user.name?.[0]?.toUpperCase() || "?";
@@ -65,7 +93,9 @@ export function PostCard({ post }: { post: PostWithItems }) {
             >
               {item.rank}
             </span>
-            <p style={{ color: "var(--ink)" }}>{item.title}</p>
+            <p style={{ color: "var(--ink)" }}>
+              <TextWithLinks text={item.title} />
+            </p>
           </div>
         ))}
       </div>
