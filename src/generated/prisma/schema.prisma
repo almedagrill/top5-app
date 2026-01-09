@@ -20,14 +20,14 @@ model User {
   updatedAt     DateTime  @updatedAt
 
   // Relations
-  posts         Post[]
-  connections   Connection[] @relation("UserConnections")
-  connectedBy   Connection[] @relation("ConnectedTo")
-  sentInvites   Invite[]
+  posts       Post[]
+  connections Connection[] @relation("UserConnections")
+  connectedBy Connection[] @relation("ConnectedTo")
+  sentInvites Invite[]
 
   // NextAuth
-  accounts      Account[]
-  sessions      Session[]
+  accounts Account[]
+  sessions Session[]
 }
 
 model Account {
@@ -66,14 +66,14 @@ model VerificationToken {
 }
 
 model Connection {
-  id        String   @id @default(cuid())
+  id        String           @id @default(cuid())
   userId    String
   friendId  String
   status    ConnectionStatus @default(PENDING)
-  createdAt DateTime @default(now())
+  createdAt DateTime         @default(now())
 
-  user      User     @relation("UserConnections", fields: [userId], references: [id], onDelete: Cascade)
-  friend    User     @relation("ConnectedTo", fields: [friendId], references: [id], onDelete: Cascade)
+  user   User @relation("UserConnections", fields: [userId], references: [id], onDelete: Cascade)
+  friend User @relation("ConnectedTo", fields: [friendId], references: [id], onDelete: Cascade)
 
   @@unique([userId, friendId])
 }
@@ -84,15 +84,15 @@ enum ConnectionStatus {
 }
 
 model Invite {
-  id        String       @id @default(cuid())
+  id         String       @id @default(cuid())
   fromUserId String
-  email     String
-  token     String       @unique
-  status    InviteStatus @default(PENDING)
-  createdAt DateTime     @default(now())
-  expiresAt DateTime
+  email      String
+  token      String       @unique
+  status     InviteStatus @default(PENDING)
+  createdAt  DateTime     @default(now())
+  expiresAt  DateTime
 
-  fromUser  User         @relation(fields: [fromUserId], references: [id], onDelete: Cascade)
+  fromUser User @relation(fields: [fromUserId], references: [id], onDelete: Cascade)
 }
 
 enum InviteStatus {
@@ -109,8 +109,8 @@ model Post {
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 
-  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  items      PostItem[]
+  user  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items PostItem[]
 }
 
 enum PeriodType {
@@ -125,9 +125,9 @@ model PostItem {
   title       String
   description String?
   url         String?
-  rank        Int      // 1-5
+  rank        Int // 1-5
 
-  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
 
 enum Category {
