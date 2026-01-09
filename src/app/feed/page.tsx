@@ -133,7 +133,7 @@ export default async function FeedPage() {
                     animationDelay: `${index * 0.05}s`,
                   }}
                 >
-                  <PostCard post={post} />
+                  <PostCard post={post} currentUserId={session.user.id} />
                 </div>
               ))}
             </div>

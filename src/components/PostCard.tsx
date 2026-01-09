@@ -1,3 +1,5 @@
+import { DeletePostButton } from "./DeletePostButton";
+
 type PostItem = {
   id: string;
   title: string;
@@ -44,9 +46,10 @@ function TextWithLinks({ text }: { text: string }) {
   );
 }
 
-export function PostCard({ post }: { post: PostWithItems }) {
+export function PostCard({ post, currentUserId }: { post: PostWithItems; currentUserId?: string }) {
   const sortedItems = [...post.items].sort((a, b) => a.rank - b.rank);
   const initial = post.user.name?.[0]?.toUpperCase() || "?";
+  const isOwnPost = currentUserId === post.user.id;
 
   return (
     <div
@@ -82,6 +85,18 @@ export function PostCard({ post }: { post: PostWithItems }) {
             })}
           </p>
         </div>
+        {isOwnPost && (
+          <div className="flex items-center gap-3">
+            <a
+              href={`/edit/${post.id}`}
+              className="text-xs transition-colors"
+              style={{ color: "var(--ink-faint)" }}
+            >
+              Edit
+            </a>
+            <DeletePostButton postId={post.id} />
+          </div>
+        )}
       </div>
 
       {/* Items - simple list */}
