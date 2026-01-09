@@ -74,8 +74,13 @@ export function SignInForm() {
       <button
         type="submit"
         disabled={loading}
-        className="btn btn-primary w-full"
-        style={{ opacity: loading ? 0.7 : 1 }}
+        className="w-full p-3 rounded-lg transition-colors text-sm font-medium"
+        style={{
+          background: "transparent",
+          border: "1px solid var(--warm)",
+          color: "var(--warm)",
+          opacity: loading ? 0.7 : 1,
+        }}
       >
         {loading ? "Signing in..." : "Sign in"}
       </button>
