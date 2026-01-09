@@ -1,7 +1,51 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
+
+function AutoExpandTextarea({
+  value,
+  onChange,
+  placeholder,
+  style,
+  onFocus,
+  onBlur,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder: string;
+  style: React.CSSProperties;
+  onFocus: () => void;
+  onBlur: () => void;
+}) {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = "auto";
+      textarea.style.height = `${Math.max(48, textarea.scrollHeight)}px`;
+    }
+  }, [value]);
+
+  return (
+    <textarea
+      ref={textareaRef}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      rows={1}
+      className="flex-1 p-3 rounded-lg transition-all duration-200 resize-none overflow-hidden"
+      style={{
+        ...style,
+        minHeight: "48px",
+        lineHeight: "1.5",
+      }}
+      onFocus={onFocus}
+      onBlur={onBlur}
+    />
+  );
+}
 
 const suggestions = [
   "podcast episode",
@@ -114,7 +158,7 @@ export function CreatePostForm({ initialItems = [] }: CreatePostFormProps) {
       </div>
 
       {/* Items */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         {items.map((item, index) => (
           <div
             key={index}
@@ -124,32 +168,34 @@ export function CreatePostForm({ initialItems = [] }: CreatePostFormProps) {
               animationDelay: `${index * 0.05}s`,
             }}
           >
-            <div className="flex items-center gap-3">
-              <span className="five text-lg w-5 text-right opacity-30">
+            <div className="flex items-start gap-3">
+              <span className="five text-lg w-5 text-right opacity-30 pt-3">
                 {index + 1}
               </span>
-              <input
-                type="text"
+              <AutoExpandTextarea
                 value={item}
-                onChange={(e) => updateItem(index, e.target.value)}
-                placeholder="Add something..."
-                className="flex-1 p-3 rounded-lg transition-all duration-200"
+                onChange={(value) => updateItem(index, value)}
+                placeholder="What shaped your week? Share a thought, link, or recommendation..."
                 style={{
                   background: item ? "var(--paper)" : "var(--paper-dark)",
                   border: "1px solid",
                   borderColor: item ? "var(--warm-light)" : "transparent",
                   color: "var(--ink)",
                 }}
-                onFocus={(e) => {
-                  e.target.style.background = "var(--paper)";
-                  e.target.style.borderColor = "var(--warm)";
+                onFocus={() => {
+                  const el = document.activeElement as HTMLTextAreaElement;
+                  if (el) {
+                    el.style.background = "var(--paper)";
+                    el.style.borderColor = "var(--warm)";
+                  }
                 }}
-                onBlur={(e) => {
-                  if (!item) {
-                    e.target.style.background = "var(--paper-dark)";
-                    e.target.style.borderColor = "transparent";
-                  } else {
-                    e.target.style.borderColor = "var(--warm-light)";
+                onBlur={() => {
+                  const el = document.activeElement as HTMLTextAreaElement;
+                  if (el && !item) {
+                    el.style.background = "var(--paper-dark)";
+                    el.style.borderColor = "transparent";
+                  } else if (el) {
+                    el.style.borderColor = "var(--warm-light)";
                   }
                 }}
               />

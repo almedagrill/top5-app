@@ -1,7 +1,45 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
+
+function AutoExpandTextarea({
+  value,
+  onChange,
+  placeholder,
+  style,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder: string;
+  style: React.CSSProperties;
+}) {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = "auto";
+      textarea.style.height = `${Math.max(48, textarea.scrollHeight)}px`;
+    }
+  }, [value]);
+
+  return (
+    <textarea
+      ref={textareaRef}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      rows={1}
+      className="flex-1 p-3 rounded-lg transition-all duration-200 resize-none overflow-hidden"
+      style={{
+        ...style,
+        minHeight: "48px",
+        lineHeight: "1.5",
+      }}
+    />
+  );
+}
 
 export function EditPostForm({
   postId,
@@ -66,19 +104,17 @@ export function EditPostForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
       {/* Items */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         {items.map((item, index) => (
           <div key={index}>
-            <div className="flex items-center gap-3">
-              <span className="five text-lg w-5 text-right opacity-30">
+            <div className="flex items-start gap-3">
+              <span className="five text-lg w-5 text-right opacity-30 pt-3">
                 {index + 1}
               </span>
-              <input
-                type="text"
+              <AutoExpandTextarea
                 value={item}
-                onChange={(e) => updateItem(index, e.target.value)}
-                placeholder="Add something..."
-                className="flex-1 p-3 rounded-lg transition-all duration-200"
+                onChange={(value) => updateItem(index, value)}
+                placeholder="What shaped your week? Share a thought, link, or recommendation..."
                 style={{
                   background: item ? "var(--paper)" : "var(--paper-dark)",
                   border: "1px solid",
