@@ -40,6 +40,21 @@ export function Navigation() {
         </svg>
       </Link>
 
+      {/* Mobile Top Header */}
+      <header
+        className="fixed top-0 left-0 right-0 z-50 sm:hidden"
+        style={{
+          background: "var(--paper)",
+          borderBottom: "1px solid var(--warm-faint)",
+        }}
+      >
+        <div className="flex justify-center py-3">
+          <Link href="/feed" className="five text-2xl">
+            Top5
+          </Link>
+        </div>
+      </header>
+
       {/* Mobile Bottom Nav */}
       <nav
         className="fixed bottom-0 left-0 right-0 z-50 sm:hidden"
