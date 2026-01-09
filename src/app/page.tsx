@@ -17,7 +17,14 @@ export default async function Home() {
       {/* Header */}
       <header className="p-6 flex justify-between items-center max-w-2xl mx-auto w-full">
         <span className="five text-2xl">Top5</span>
-        <Link href="/sign-in" className="text-sm link">
+        <Link
+          href="/sign-in"
+          className="text-sm px-4 py-2 rounded-lg transition-colors"
+          style={{
+            border: "1px solid var(--warm)",
+            color: "var(--warm)",
+          }}
+        >
           Sign in
         </Link>
       </header>

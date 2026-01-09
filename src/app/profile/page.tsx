@@ -112,7 +112,11 @@ export default async function ProfilePage() {
         >
           <button
             type="submit"
-            className="btn-ghost text-sm"
+            className="text-sm px-4 py-2 rounded-lg transition-colors"
+            style={{
+              border: "1px solid var(--warm)",
+              color: "var(--warm)",
+            }}
           >
             Sign out
           </button>
