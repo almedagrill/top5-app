@@ -117,6 +117,25 @@ export default async function JoinPage({
           <h1 className="text-xl" style={{ color: "var(--ink)" }}>
             {inviter.name || "Someone"} wants you in their Top 5
           </h1>
+          <p className="mt-2 text-sm" style={{ color: "var(--ink-light)" }}>
+            You&apos;re someone whose perspective they value.
+          </p>
+        </div>
+
+        {/* Explainer */}
+        <div
+          className="text-left p-5 rounded-lg mb-8"
+          style={{ background: "var(--paper-dark)" }}
+        >
+          <p className="text-sm leading-relaxed" style={{ color: "var(--ink)" }}>
+            Top 5 is a small, intentional space built on the idea that you&apos;re shaped by who you surround yourself with.
+          </p>
+          <p className="text-sm leading-relaxed mt-3" style={{ color: "var(--ink-light)" }}>
+            Once a week, people share up to five things that shaped their week. You choose who you see, and people only see you if they&apos;ve chosen you.
+          </p>
+          <p className="text-sm mt-4 font-medium" style={{ color: "var(--ink)" }}>
+            No noise. Just good influence.
+          </p>
         </div>
 
         {!hasRoom ? (
@@ -153,12 +172,6 @@ export default async function JoinPage({
           </div>
         )}
 
-        <p
-          className="mt-8 text-sm"
-          style={{ color: "var(--ink-faint)" }}
-        >
-          Share what shaped your week with the 5 people whose opinions matter most.
-        </p>
       </div>
     </div>
   );
