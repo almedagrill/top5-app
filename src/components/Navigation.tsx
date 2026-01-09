@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navItems = [
-  { href: "/feed", label: "Feed" },
+  { href: "/feed", label: "Your Circle" },
   { href: "/profile", label: "You" },
 ];
 
@@ -107,7 +107,7 @@ export function Navigation() {
                 color: "white",
               }}
             >
-              +Add to Top 5
+              + Add Entry
             </Link>
           </div>
         </div>
