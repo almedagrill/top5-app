@@ -23,9 +23,10 @@ export async function POST(request: Request) {
     const token = randomBytes(32).toString("hex");
 
     // Use provided email or a placeholder for link-only invites
-    const hasRealEmail = email?.trim();
-    const inviteEmail = hasRealEmail
-      ? email.trim().toLowerCase()
+    const trimmedEmail = email?.trim();
+    const hasRealEmail = !!trimmedEmail;
+    const inviteEmail = trimmedEmail
+      ? trimmedEmail.toLowerCase()
       : `link-${token.slice(0, 8)}@invite.local`;
 
     // Check if user already has 5 connections + pending invites
