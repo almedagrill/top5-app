@@ -3,6 +3,27 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { JoinButton } from "./JoinButton";
+import type { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ userId: string }>;
+}): Promise<Metadata> {
+  const { userId } = await params;
+
+  const inviter = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { name: true },
+  });
+
+  const name = inviter?.name || "Someone";
+
+  return {
+    title: `Join ${name}'s Top 5`,
+    description: `${name} invited you to their Top 5. Share what shaped your week with the people whose opinions matter most.`,
+  };
+}
 
 export default async function JoinPage({
   params,
