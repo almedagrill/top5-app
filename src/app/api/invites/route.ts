@@ -107,7 +107,7 @@ export async function POST(request: Request) {
       try {
         const fromName = session.user.name || "Someone";
         await resend.emails.send({
-          from: "Top5 <invites@my-top5.vercel.app>",
+          from: "Top5 <invites@my-top5.com>",
           to: email.toLowerCase(),
           subject: `${fromName} invited you to their Top 5`,
           html: `
