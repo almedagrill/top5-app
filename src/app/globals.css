@@ -1,26 +1,228 @@
 @import "tailwindcss";
 
+/* Design System: Quiet Warmth */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Simplified Palette */
+  --ink: #2C2C2C;
+  --ink-light: #5C5C5C;
+  --ink-faint: #9A9A9A;
+  --warm: #C4A484;
+  --warm-light: #E8DDD4;
+  --warm-faint: #F5F0EB;
+  --paper: #FDFBF8;
+  --paper-dark: #F7F4F0;
+
+  /* Typography */
+  --font-serif: var(--font-fraunces), Georgia, serif;
+  --font-sans: var(--font-dm-sans), system-ui, sans-serif;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* Transitions */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration: 200ms;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--paper);
+  --color-foreground: var(--ink);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Base */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Typography */
+h1, h2, h3 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+::selection {
+  background: var(--warm-light);
+}
+
+:focus-visible {
+  outline: 1.5px solid var(--warm);
+  outline-offset: 2px;
+}
+
+/* Scrollbar - subtle */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--warm-light);
+  border-radius: 3px;
+}
+
+/* Minimal Components */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all var(--duration) var(--ease);
+}
+
+.btn-primary {
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+}
+
+.btn-primary:hover {
+  background: var(--ink-light);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--ink-faint);
+}
+
+.btn-secondary:hover {
+  border-color: var(--ink);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ink-light);
+  border: none;
+  padding: var(--space-2) var(--space-3);
+}
+
+.btn-ghost:hover {
+  color: var(--ink);
+}
+
+/* Input */
+.input {
+  width: 100%;
+  padding: var(--space-4);
+  background: var(--paper);
+  border: 1px solid var(--warm-light);
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: var(--ink);
+  transition: border-color var(--duration) var(--ease);
+}
+
+.input::placeholder {
+  color: var(--ink-faint);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--warm);
+}
+
+/* Card - very minimal */
+.card {
+  background: var(--paper);
+  border: 1px solid var(--warm-faint);
+  border-radius: 12px;
+}
+
+/* The "5" */
+.five {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--warm);
+}
+
+/* Animations - subtle */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-in {
+  animation: slideUp 0.4s var(--ease) forwards;
+}
+
+.delay-1 { animation-delay: 0.05s; }
+.delay-2 { animation-delay: 0.1s; }
+.delay-3 { animation-delay: 0.15s; }
+.delay-4 { animation-delay: 0.2s; }
+.delay-5 { animation-delay: 0.25s; }
+
+/* Status */
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.status-connected {
+  background: #6B8E6B;
+}
+
+.status-pending {
+  background: var(--warm);
+}
+
+/* Divider */
+.divider {
+  height: 1px;
+  background: var(--warm-faint);
+}
+
+/* Link */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.link {
+  color: var(--ink-light);
+  transition: color var(--duration) var(--ease);
+}
+
+.link:hover {
+  color: var(--ink);
 }

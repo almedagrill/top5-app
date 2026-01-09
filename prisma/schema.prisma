@@ -1,0 +1,141 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String?
+  name          String?
+  image         String?
+  emailVerified DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  posts         Post[]
+  connections   Connection[] @relation("UserConnections")
+  connectedBy   Connection[] @relation("ConnectedTo")
+  sentInvites   Invite[]
+
+  // NextAuth
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Connection {
+  id        String   @id @default(cuid())
+  userId    String
+  friendId  String
+  status    ConnectionStatus @default(PENDING)
+  createdAt DateTime @default(now())
+
+  user      User     @relation("UserConnections", fields: [userId], references: [id], onDelete: Cascade)
+  friend    User     @relation("ConnectedTo", fields: [friendId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, friendId])
+}
+
+enum ConnectionStatus {
+  PENDING
+  ACCEPTED
+}
+
+model Invite {
+  id        String       @id @default(cuid())
+  fromUserId String
+  email     String
+  token     String       @unique
+  status    InviteStatus @default(PENDING)
+  createdAt DateTime     @default(now())
+  expiresAt DateTime
+
+  fromUser  User         @relation(fields: [fromUserId], references: [id], onDelete: Cascade)
+}
+
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+  EXPIRED
+}
+
+model Post {
+  id         String     @id @default(cuid())
+  userId     String
+  title      String
+  periodType PeriodType @default(WEEKLY)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items      PostItem[]
+}
+
+enum PeriodType {
+  DAILY
+  WEEKLY
+}
+
+model PostItem {
+  id          String   @id @default(cuid())
+  postId      String
+  category    Category
+  title       String
+  description String?
+  url         String?
+  rank        Int      // 1-5
+
+  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+enum Category {
+  BOOK
+  SONG
+  FOOD
+  LEARNING
+  MOVIE
+  PODCAST
+  PLACE
+  QUOTE
+  OTHER
+}
