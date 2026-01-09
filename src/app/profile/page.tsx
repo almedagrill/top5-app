@@ -5,6 +5,7 @@ import { Navigation } from "@/components/Navigation";
 import { PostCard } from "@/components/PostCard";
 import { InviteForm } from "@/components/InviteForm";
 import { ConnectionCard } from "@/components/ConnectionCard";
+import { PendingInviteCard } from "@/components/PendingInviteCard";
 import Link from "next/link";
 
 export default async function ProfilePage() {
@@ -161,13 +162,7 @@ export default async function ProfilePage() {
               </p>
               <div className="space-y-2">
                 {pendingInvites.map((invite) => (
-                  <div
-                    key={invite.id}
-                    className="card p-4 flex items-center justify-between"
-                  >
-                    <span style={{ color: "var(--ink)" }}>{invite.email}</span>
-                    <span className="status-dot status-pending" />
-                  </div>
+                  <PendingInviteCard key={invite.id} invite={invite} />
                 ))}
               </div>
             </div>

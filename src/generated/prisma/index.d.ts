@@ -8436,6 +8436,7 @@ export namespace Prisma {
     title: string | null
     description: string | null
     url: string | null
+    imageUrl: string | null
     rank: number | null
   }
 
@@ -8446,6 +8447,7 @@ export namespace Prisma {
     title: string | null
     description: string | null
     url: string | null
+    imageUrl: string | null
     rank: number | null
   }
 
@@ -8456,6 +8458,7 @@ export namespace Prisma {
     title: number
     description: number
     url: number
+    imageUrl: number
     rank: number
     _all: number
   }
@@ -8476,6 +8479,7 @@ export namespace Prisma {
     title?: true
     description?: true
     url?: true
+    imageUrl?: true
     rank?: true
   }
 
@@ -8486,6 +8490,7 @@ export namespace Prisma {
     title?: true
     description?: true
     url?: true
+    imageUrl?: true
     rank?: true
   }
 
@@ -8496,6 +8501,7 @@ export namespace Prisma {
     title?: true
     description?: true
     url?: true
+    imageUrl?: true
     rank?: true
     _all?: true
   }
@@ -8593,6 +8599,7 @@ export namespace Prisma {
     title: string
     description: string | null
     url: string | null
+    imageUrl: string | null
     rank: number
     _count: PostItemCountAggregateOutputType | null
     _avg: PostItemAvgAggregateOutputType | null
@@ -8622,6 +8629,7 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     url?: boolean
+    imageUrl?: boolean
     rank?: boolean
     post?: boolean | PostDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["postItem"]>
@@ -8633,6 +8641,7 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     url?: boolean
+    imageUrl?: boolean
     rank?: boolean
     post?: boolean | PostDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["postItem"]>
@@ -8644,6 +8653,7 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     url?: boolean
+    imageUrl?: boolean
     rank?: boolean
   }
 
@@ -8666,6 +8676,7 @@ export namespace Prisma {
       title: string
       description: string | null
       url: string | null
+      imageUrl: string | null
       rank: number
     }, ExtArgs["result"]["postItem"]>
     composites: {}
@@ -9067,6 +9078,7 @@ export namespace Prisma {
     readonly title: FieldRef<"PostItem", 'String'>
     readonly description: FieldRef<"PostItem", 'String'>
     readonly url: FieldRef<"PostItem", 'String'>
+    readonly imageUrl: FieldRef<"PostItem", 'String'>
     readonly rank: FieldRef<"PostItem", 'Int'>
   }
     
@@ -9508,6 +9520,7 @@ export namespace Prisma {
     title: 'title',
     description: 'description',
     url: 'url',
+    imageUrl: 'imageUrl',
     rank: 'rank'
   };
 
@@ -10126,6 +10139,7 @@ export namespace Prisma {
     title?: StringFilter<"PostItem"> | string
     description?: StringNullableFilter<"PostItem"> | string | null
     url?: StringNullableFilter<"PostItem"> | string | null
+    imageUrl?: StringNullableFilter<"PostItem"> | string | null
     rank?: IntFilter<"PostItem"> | number
     post?: XOR<PostRelationFilter, PostWhereInput>
   }
@@ -10137,6 +10151,7 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrderInput | SortOrder
     url?: SortOrderInput | SortOrder
+    imageUrl?: SortOrderInput | SortOrder
     rank?: SortOrder
     post?: PostOrderByWithRelationInput
   }
@@ -10151,6 +10166,7 @@ export namespace Prisma {
     title?: StringFilter<"PostItem"> | string
     description?: StringNullableFilter<"PostItem"> | string | null
     url?: StringNullableFilter<"PostItem"> | string | null
+    imageUrl?: StringNullableFilter<"PostItem"> | string | null
     rank?: IntFilter<"PostItem"> | number
     post?: XOR<PostRelationFilter, PostWhereInput>
   }, "id">
@@ -10162,6 +10178,7 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrderInput | SortOrder
     url?: SortOrderInput | SortOrder
+    imageUrl?: SortOrderInput | SortOrder
     rank?: SortOrder
     _count?: PostItemCountOrderByAggregateInput
     _avg?: PostItemAvgOrderByAggregateInput
@@ -10180,6 +10197,7 @@ export namespace Prisma {
     title?: StringWithAggregatesFilter<"PostItem"> | string
     description?: StringNullableWithAggregatesFilter<"PostItem"> | string | null
     url?: StringNullableWithAggregatesFilter<"PostItem"> | string | null
+    imageUrl?: StringNullableWithAggregatesFilter<"PostItem"> | string | null
     rank?: IntWithAggregatesFilter<"PostItem"> | number
   }
 
@@ -10673,6 +10691,7 @@ export namespace Prisma {
     title: string
     description?: string | null
     url?: string | null
+    imageUrl?: string | null
     rank: number
     post: PostCreateNestedOneWithoutItemsInput
   }
@@ -10684,6 +10703,7 @@ export namespace Prisma {
     title: string
     description?: string | null
     url?: string | null
+    imageUrl?: string | null
     rank: number
   }
 
@@ -10693,6 +10713,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     url?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     rank?: IntFieldUpdateOperationsInput | number
     post?: PostUpdateOneRequiredWithoutItemsNestedInput
   }
@@ -10704,6 +10725,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     url?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     rank?: IntFieldUpdateOperationsInput | number
   }
 
@@ -10714,6 +10736,7 @@ export namespace Prisma {
     title: string
     description?: string | null
     url?: string | null
+    imageUrl?: string | null
     rank: number
   }
 
@@ -10723,6 +10746,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     url?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     rank?: IntFieldUpdateOperationsInput | number
   }
 
@@ -10733,6 +10757,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     url?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     rank?: IntFieldUpdateOperationsInput | number
   }
 
@@ -11251,6 +11276,7 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     url?: SortOrder
+    imageUrl?: SortOrder
     rank?: SortOrder
   }
 
@@ -11265,6 +11291,7 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     url?: SortOrder
+    imageUrl?: SortOrder
     rank?: SortOrder
   }
 
@@ -11275,6 +11302,7 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     url?: SortOrder
+    imageUrl?: SortOrder
     rank?: SortOrder
   }
 
@@ -12771,6 +12799,7 @@ export namespace Prisma {
     title: string
     description?: string | null
     url?: string | null
+    imageUrl?: string | null
     rank: number
   }
 
@@ -12780,6 +12809,7 @@ export namespace Prisma {
     title: string
     description?: string | null
     url?: string | null
+    imageUrl?: string | null
     rank: number
   }
 
@@ -12862,6 +12892,7 @@ export namespace Prisma {
     title?: StringFilter<"PostItem"> | string
     description?: StringNullableFilter<"PostItem"> | string | null
     url?: StringNullableFilter<"PostItem"> | string | null
+    imageUrl?: StringNullableFilter<"PostItem"> | string | null
     rank?: IntFilter<"PostItem"> | number
   }
 
@@ -13129,6 +13160,7 @@ export namespace Prisma {
     title: string
     description?: string | null
     url?: string | null
+    imageUrl?: string | null
     rank: number
   }
 
@@ -13138,6 +13170,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     url?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     rank?: IntFieldUpdateOperationsInput | number
   }
 
@@ -13147,6 +13180,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     url?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     rank?: IntFieldUpdateOperationsInput | number
   }
 
@@ -13156,6 +13190,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     url?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     rank?: IntFieldUpdateOperationsInput | number
   }
 

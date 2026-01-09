@@ -18,23 +18,42 @@ const suggestions = [
   "newsletter",
 ];
 
+interface PostItem {
+  title: string;
+  url: string;
+  imageUrl: string;
+}
+
+const emptyItem: PostItem = { title: "", url: "", imageUrl: "" };
+
 export function CreatePostForm() {
   const router = useRouter();
-  const [items, setItems] = useState<string[]>(["", "", "", "", ""]);
+  const [items, setItems] = useState<PostItem[]>([
+    { ...emptyItem },
+    { ...emptyItem },
+    { ...emptyItem },
+    { ...emptyItem },
+    { ...emptyItem },
+  ]);
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  function updateItem(index: number, value: string) {
+  function updateItem(index: number, field: keyof PostItem, value: string) {
     const newItems = [...items];
-    newItems[index] = value;
+    newItems[index] = { ...newItems[index], [field]: value };
     setItems(newItems);
+  }
+
+  function toggleExpand(index: number) {
+    setExpandedIndex(expandedIndex === index ? null : index);
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
 
-    const filledItems = items.filter((item) => item.trim());
+    const filledItems = items.filter((item) => item.title.trim());
     if (filledItems.length === 0) {
       setError("Share at least one thing from your week");
       return;
@@ -54,9 +73,10 @@ export function CreatePostForm() {
           periodType: "WEEKLY",
           items: items
             .map((item, index) => ({
-              title: item,
+              title: item.title,
               description: "",
-              url: "",
+              url: item.url || "",
+              imageUrl: item.imageUrl || "",
               category: "OTHER",
               rank: index + 1,
             }))
@@ -77,7 +97,7 @@ export function CreatePostForm() {
     }
   }
 
-  const filledCount = items.filter((i) => i.trim()).length;
+  const filledCount = items.filter((i) => i.title.trim()).length;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
@@ -117,35 +137,113 @@ export function CreatePostForm() {
               animationDelay: `${index * 0.05}s`,
             }}
           >
-            <div className="flex items-center gap-3">
-              <span className="five text-lg w-5 text-right opacity-30">
+            <div className="flex items-start gap-3">
+              <span className="five text-lg w-5 text-right opacity-30 mt-3">
                 {index + 1}
               </span>
-              <input
-                type="text"
-                value={item}
-                onChange={(e) => updateItem(index, e.target.value)}
-                placeholder="Add something..."
-                className="flex-1 p-3 rounded-lg transition-all duration-200"
-                style={{
-                  background: item ? "var(--paper)" : "var(--paper-dark)",
-                  border: "1px solid",
-                  borderColor: item ? "var(--warm-light)" : "transparent",
-                  color: "var(--ink)",
-                }}
-                onFocus={(e) => {
-                  e.target.style.background = "var(--paper)";
-                  e.target.style.borderColor = "var(--warm)";
-                }}
-                onBlur={(e) => {
-                  if (!item) {
-                    e.target.style.background = "var(--paper-dark)";
-                    e.target.style.borderColor = "transparent";
-                  } else {
-                    e.target.style.borderColor = "var(--warm-light)";
-                  }
-                }}
-              />
+              <div className="flex-1 space-y-2">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={item.title}
+                    onChange={(e) => updateItem(index, "title", e.target.value)}
+                    placeholder="Add something..."
+                    className="flex-1 p-3 rounded-lg transition-all duration-200"
+                    style={{
+                      background: item.title ? "var(--paper)" : "var(--paper-dark)",
+                      border: "1px solid",
+                      borderColor: item.title ? "var(--warm-light)" : "transparent",
+                      color: "var(--ink)",
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.background = "var(--paper)";
+                      e.target.style.borderColor = "var(--warm)";
+                    }}
+                    onBlur={(e) => {
+                      if (!item.title) {
+                        e.target.style.background = "var(--paper-dark)";
+                        e.target.style.borderColor = "transparent";
+                      } else {
+                        e.target.style.borderColor = "var(--warm-light)";
+                      }
+                    }}
+                  />
+                  {item.title && (
+                    <button
+                      type="button"
+                      onClick={() => toggleExpand(index)}
+                      className="px-3 py-3 rounded-lg transition-colors"
+                      style={{
+                        background: expandedIndex === index ? "var(--warm-light)" : "var(--paper-dark)",
+                        color: "var(--ink-light)",
+                      }}
+                      title="Add link or image"
+                    >
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+
+                {/* Expanded fields */}
+                {expandedIndex === index && (
+                  <div className="space-y-2 pl-0">
+                    <input
+                      type="url"
+                      value={item.url}
+                      onChange={(e) => updateItem(index, "url", e.target.value)}
+                      placeholder="Add link (optional)"
+                      className="w-full p-2.5 text-sm rounded-lg"
+                      style={{
+                        background: "var(--paper-dark)",
+                        border: "1px solid var(--warm-faint)",
+                        color: "var(--ink)",
+                      }}
+                    />
+                    <input
+                      type="url"
+                      value={item.imageUrl}
+                      onChange={(e) => updateItem(index, "imageUrl", e.target.value)}
+                      placeholder="Add image URL (optional)"
+                      className="w-full p-2.5 text-sm rounded-lg"
+                      style={{
+                        background: "var(--paper-dark)",
+                        border: "1px solid var(--warm-faint)",
+                        color: "var(--ink)",
+                      }}
+                    />
+                    {item.imageUrl && (
+                      <img
+                        src={item.imageUrl}
+                        alt="Preview"
+                        className="w-full h-32 object-cover rounded-lg"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).style.display = "none";
+                        }}
+                      />
+                    )}
+                  </div>
+                )}
+
+                {/* Show indicators if link/image added */}
+                {!expandedIndex && (item.url || item.imageUrl) && (
+                  <div className="flex gap-2 text-xs" style={{ color: "var(--ink-faint)" }}>
+                    {item.url && <span>link added</span>}
+                    {item.imageUrl && <span>image added</span>}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         ))}
