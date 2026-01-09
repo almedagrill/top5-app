@@ -91,7 +91,7 @@ export default async function Home() {
         className="p-6 text-center text-sm"
         style={{ color: "var(--ink-faint)" }}
       >
-        share what&apos;s worth sharing
+        share what matters. choose wisely.
       </footer>
     </div>
   );
