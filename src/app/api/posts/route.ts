@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { Category, PeriodType } from "@prisma/client";
+import { Category, PeriodType } from "@/generated/prisma";
 
 export async function POST(request: Request) {
   const session = await auth();
