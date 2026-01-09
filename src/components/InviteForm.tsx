@@ -7,6 +7,8 @@ export function InviteForm({ currentCount }: { currentCount: number }) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [inviteLink, setInviteLink] = useState("");
+  const [emailSent, setEmailSent] = useState(false);
+  const [copied, setCopied] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
@@ -16,6 +18,8 @@ export function InviteForm({ currentCount }: { currentCount: number }) {
     e.preventDefault();
     setError("");
     setInviteLink("");
+    setEmailSent(false);
+    setCopied(false);
 
     if (!email.trim()) {
       setError("Enter an email");
@@ -38,6 +42,7 @@ export function InviteForm({ currentCount }: { currentCount: number }) {
       }
 
       setInviteLink(data.inviteLink);
+      setEmailSent(data.emailSent);
       setEmail("");
       router.refresh();
     } catch (err) {
@@ -49,6 +54,8 @@ export function InviteForm({ currentCount }: { currentCount: number }) {
 
   async function copyLink() {
     await navigator.clipboard.writeText(inviteLink);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   }
 
   if (!canInvite) {
@@ -91,21 +98,32 @@ export function InviteForm({ currentCount }: { currentCount: number }) {
       )}
 
       {inviteLink && (
-        <div className="mt-4 flex gap-2">
-          <input
-            type="text"
-            value={inviteLink}
-            readOnly
-            className="input flex-1 text-sm"
-            style={{ background: "var(--paper-dark)" }}
-          />
-          <button
-            type="button"
-            onClick={copyLink}
-            className="btn btn-secondary"
-          >
-            Copy
-          </button>
+        <div className="mt-4">
+          {emailSent ? (
+            <p className="text-sm mb-3" style={{ color: "var(--ink-light)" }}>
+              Invite sent! You can also share this link:
+            </p>
+          ) : (
+            <p className="text-sm mb-3" style={{ color: "var(--ink-light)" }}>
+              Share this link with them:
+            </p>
+          )}
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={inviteLink}
+              readOnly
+              className="input flex-1 text-sm"
+              style={{ background: "var(--paper-dark)" }}
+            />
+            <button
+              type="button"
+              onClick={copyLink}
+              className="btn btn-secondary"
+            >
+              {copied ? "Copied!" : "Copy"}
+            </button>
+          </div>
         </div>
       )}
     </div>
