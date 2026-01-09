@@ -91,6 +91,10 @@ export default async function Home() {
         className="p-6 text-center text-sm"
         style={{ color: "var(--ink-faint)" }}
       >
+        <Link href="/how-it-works" className="underline">
+          How this works
+        </Link>
+        <span className="mx-2">·</span>
         Choose wisely.
       </footer>
     </div>
