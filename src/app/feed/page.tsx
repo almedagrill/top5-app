@@ -24,10 +24,11 @@ export default async function FeedPage() {
 
   const friendIds = connections.map((c) => c.friendId);
 
+  // Include own posts + friends' posts
   const posts = await prisma.post.findMany({
     where: {
       userId: {
-        in: friendIds,
+        in: [session.user.id, ...friendIds],
       },
     },
     include: {
@@ -51,7 +52,7 @@ export default async function FeedPage() {
       <Navigation />
 
       <main className="max-w-2xl mx-auto px-6 pt-20 sm:pt-24 pb-24">
-        {friendIds.length === 0 ? (
+        {friendIds.length === 0 && posts.length === 0 ? (
           // Empty state with full explanation
           <div className="py-8">
             <div className="text-center mb-12">
