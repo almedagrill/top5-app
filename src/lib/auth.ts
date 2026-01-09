@@ -5,6 +5,9 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "./prisma";
 import bcrypt from "bcryptjs";
 
+// Founder's user ID - appears in everyone's feed by default (like Tom on MySpace)
+const FOUNDER_ID = "cmk75osam000011582fsnrqqg";
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   trustHost: true,
   adapter: PrismaAdapter(prisma as any),
@@ -68,6 +71,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.id = token.id as string;
       }
       return session;
+    },
+  },
+  events: {
+    // Add founder to new user's circle when they sign up via OAuth (like Tom on MySpace)
+    async createUser({ user }) {
+      if (user.id && user.id !== FOUNDER_ID) {
+        try {
+          await prisma.connection.create({
+            data: {
+              userId: user.id,
+              friendId: FOUNDER_ID,
+              status: "ACCEPTED",
+            },
+          });
+        } catch {
+          // Silently fail if founder doesn't exist or connection fails
+        }
+      }
     },
   },
 });

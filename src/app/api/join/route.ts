@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
+// Founder doesn't count toward the 5-person limit (like Tom on MySpace)
+const FOUNDER_ID = "cmk75osam000011582fsnrqqg";
+
 export async function POST(request: Request) {
   const session = await auth();
 
@@ -40,9 +43,12 @@ export async function POST(request: Request) {
       );
     }
 
-    // Check if inviter has room
+    // Check if inviter has room (founder doesn't count toward limit)
     const inviterConnectionCount = await prisma.connection.count({
-      where: { userId: inviterId },
+      where: {
+        userId: inviterId,
+        friendId: { not: FOUNDER_ID },
+      },
     });
 
     if (inviterConnectionCount >= 5) {

@@ -5,6 +5,9 @@ import Link from "next/link";
 import { JoinButton } from "./JoinButton";
 import type { Metadata } from "next";
 
+// Founder doesn't count toward the 5-person limit (like Tom on MySpace)
+const FOUNDER_ID = "cmk75osam000011582fsnrqqg";
+
 export async function generateMetadata({
   params,
 }: {
@@ -62,9 +65,12 @@ export default async function JoinPage({
     );
   }
 
-  // Check if inviter has room
+  // Check if inviter has room (founder doesn't count toward limit)
   const connectionCount = await prisma.connection.count({
-    where: { userId: inviter.id },
+    where: {
+      userId: inviter.id,
+      friendId: { not: FOUNDER_ID },
+    },
   });
 
   const hasRoom = connectionCount < 5;

@@ -8,6 +8,9 @@ import { ConnectionCard } from "@/components/ConnectionCard";
 import { PendingInviteCard } from "@/components/PendingInviteCard";
 import Link from "next/link";
 
+// Founder doesn't count toward the 5-person limit (like Tom on MySpace)
+const FOUNDER_ID = "cmk75osam000011582fsnrqqg";
+
 export default async function ProfilePage() {
   const session = await auth();
 
@@ -66,7 +69,10 @@ export default async function ProfilePage() {
     },
   });
 
-  const acceptedCount = connections.filter((c) => c.status === "ACCEPTED").length;
+  // Exclude founder from the count (they're a bonus, not one of your 5)
+  const acceptedCount = connections.filter(
+    (c) => c.status === "ACCEPTED" && c.friendId !== FOUNDER_ID
+  ).length;
   const totalCount = acceptedCount + pendingInvites.length;
 
   const initial = session.user.name?.[0]?.toUpperCase() ||

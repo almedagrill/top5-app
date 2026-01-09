@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
+// Founder's user ID - appears in everyone's feed by default (like Tom on MySpace)
+const FOUNDER_ID = "cmk75osam000011582fsnrqqg";
+
 export async function POST(request: Request) {
   try {
     const { email, password, name } = await request.json();
@@ -43,6 +46,22 @@ export async function POST(request: Request) {
         name: name || null,
       },
     });
+
+    // Add founder to new user's circle (like Tom on MySpace)
+    // They can remove this connection anytime
+    if (user.id !== FOUNDER_ID) {
+      try {
+        await prisma.connection.create({
+          data: {
+            userId: user.id,
+            friendId: FOUNDER_ID,
+            status: "ACCEPTED",
+          },
+        });
+      } catch {
+        // Silently fail if founder doesn't exist or connection fails
+      }
+    }
 
     return NextResponse.json({
       user: {
