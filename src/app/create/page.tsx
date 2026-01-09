@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { prisma } from "@/lib/prisma";
 import { Navigation } from "@/components/Navigation";
 import { CreatePostForm } from "@/components/CreatePostForm";
 
@@ -9,6 +10,22 @@ export default async function CreatePage() {
   if (!session?.user) {
     redirect("/sign-in");
   }
+
+  // Fetch user's most recent post to pre-fill the form
+  const lastPost = await prisma.post.findFirst({
+    where: { userId: session.user.id },
+    orderBy: { createdAt: "desc" },
+    include: {
+      items: {
+        orderBy: { rank: "asc" },
+      },
+    },
+  });
+
+  // Convert to simple string array for the form
+  const initialItems = lastPost
+    ? lastPost.items.map((item) => item.title)
+    : [];
 
   return (
     <div className="min-h-screen" style={{ background: "var(--paper)" }}>
@@ -24,7 +41,7 @@ export default async function CreatePage() {
           </p>
         </div>
 
-        <CreatePostForm />
+        <CreatePostForm initialItems={initialItems} />
       </main>
     </div>
   );

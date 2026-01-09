@@ -18,9 +18,16 @@ const suggestions = [
   "newsletter",
 ];
 
-export function CreatePostForm() {
+interface CreatePostFormProps {
+  initialItems?: string[];
+}
+
+export function CreatePostForm({ initialItems = [] }: CreatePostFormProps) {
   const router = useRouter();
-  const [items, setItems] = useState<string[]>(["", "", "", "", ""]);
+
+  // Pad with empty strings to always have 5 slots
+  const defaultItems = [...initialItems, "", "", "", "", ""].slice(0, 5);
+  const [items, setItems] = useState<string[]>(defaultItems);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
