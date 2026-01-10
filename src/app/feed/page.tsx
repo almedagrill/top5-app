@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { Navigation } from "@/components/Navigation";
 import { PostCard } from "@/components/PostCard";
+import { PullToRefresh } from "@/components/PullToRefresh";
 import Link from "next/link";
 
 // Founder ID for showing CTA to new users
@@ -54,10 +55,11 @@ export default async function FeedPage() {
   });
 
   return (
-    <div className="min-h-screen" style={{ background: "var(--paper)" }}>
-      <Navigation />
+    <PullToRefresh>
+      <div style={{ background: "var(--paper)" }}>
+        <Navigation />
 
-      <main className="max-w-2xl mx-auto px-6 pt-20 sm:pt-24 pb-24">
+        <main className="max-w-2xl mx-auto px-6 pt-20 sm:pt-24 pb-24">
         {friendIds.length === 0 && posts.length === 0 ? (
           // Empty state with full explanation
           <div className="py-8">
@@ -177,6 +179,7 @@ export default async function FeedPage() {
           </>
         )}
       </main>
-    </div>
+      </div>
+    </PullToRefresh>
   );
 }
